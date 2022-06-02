@@ -1,6 +1,7 @@
 const express = require('express');
 const myHelper = require('../util/helper')
 const underscore = require('underscore')
+const film = require('../get-films/films')
 
 const router = express.Router();
 
@@ -34,6 +35,14 @@ router.get('/candidates/:canidatesName', function(req, res){
     console.log('The request objects is '+ JSON.stringify(req.params))
     console.log('Candidates name is '+req.params.canidatesName)
     res.send('Done')
+})
+router.get('/films', function (req, res) {
+    res.send(film);
+});
+
+router.get('/movies',function(req,res){
+    var array=['Mohan','Sohan']
+    res.send(array)
 })
 
 
