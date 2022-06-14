@@ -31,7 +31,7 @@ const loginUser = async function (req, res) {
   let token = jwt.sign(
     {
       userId: user._id.toString(),
-      batch: "thorium",
+      batch: "Radon",
       organisation: "FunctionUp",
     },
     "functionup-radon"
@@ -83,8 +83,23 @@ const updateUser = async function (req, res) {
   let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
   res.send({ status: updatedUser, data: updatedUser });
 };
+//////Delete///////
+const deleteUser = async function (req, res) {
+  
+  let userId = req.params.userId;
+  let user = await userModel.findByIdAndDelete(userId);
+  //Return an error if no user with the given id exists in the db
+  if (!user) {
+    return res.send("No such user exists");
+  }
+
+  let userData = req.body;
+  let deleteUser = await userModel.findByIdAndDelete({ _id: userId }, userData);
+  res.send({ status: deleteUser, data: deleteUser });
+};
 
 module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
+module.exports.deleteUser = deleteUser;
