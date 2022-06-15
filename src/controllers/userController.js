@@ -31,10 +31,10 @@ const loginUser = async function (req, res) {
   let token = jwt.sign(
     {
       userId: user._id.toString(),
-      batch: "thorium",
+      batch: "radon",
       organisation: "FUnctionUp",
     },
-    "functionup-thorium"
+    "functionup-radon"
   );
   res.setHeader("x-auth-token", token);
   res.send({ status: true, data: token });
@@ -84,6 +84,20 @@ const updateUser = async function (req, res) {
   res.send({ status: updatedUser, data: updatedUser });
 };
 
+////------------Delete---------//
+const deleteUser = async function(req, res){
+  let userId = req.params.userId;
+  let user = await userModel.findById(userId);
+
+  if (!user) {
+     return res.send("user not exit");
+    }
+
+  let userData= req.body;
+  let updatedUser =await userModel.findOneAndUpdate({_id: userId}, {$set:userData}, {new:true});
+  res.send = ({ status:true, data : updatedUser });
+}
+//------------------------------//
 const postMessage = async function (req, res) {
     let message = req.body.message
     // Check if the token is present
@@ -91,7 +105,7 @@ const postMessage = async function (req, res) {
     // Return a different error message in both these cases
     let token = req.headers["x-auth-token"]
     if(!token) return res.send({status: false, msg: "token must be present in the request header"})
-    let decodedToken = jwt.verify(token, 'functionup-thorium')
+    let decodedToken = jwt.verify(token, 'functionup-radon')
 
     if(!decodedToken) return res.send({status: false, msg:"token is not valid"})
     
@@ -119,4 +133,5 @@ module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
-module.exports.postMessage = postMessage
+module.exports.postMessage = postMessage;
+module.exports.deleteUser = deleteUser
